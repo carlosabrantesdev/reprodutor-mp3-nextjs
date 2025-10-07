@@ -1,6 +1,6 @@
 # Reprodutor MP3 Next.js
 
-Um reprodutor de músicas MP3 moderno, feito com Next.js, suportando playlists locais, integração com metadados do iTunes, controles completos e interface responsiva.
+Um reprodutor de músicas MP3, feito com Next.js, suportando playlists locais, integração com a API do iTunes, controles simples e interface responsiva.
 
 ## Funcionalidades
 
@@ -15,9 +15,7 @@ Um reprodutor de músicas MP3 moderno, feito com Next.js, suportando playlists l
 - Next.js
 - React
 - TypeScript
-- CSS (PostCSS/Tailwind opcional)
-- API do iTunes
-- HTML5 Audio API
+- CSS Tailwind
 
 ## Estrutura do Projeto
 
@@ -60,5 +58,6 @@ Acesse [http://localhost:3000](http://localhost:3000) no navegador para testar.
 
 ## Autor
 
-Desenvolvido por Carlos Henrique  
+Desenvolvido por Carlos Abrantes
 GitHub: [github.com/carlosabrantesdev](https://github.com/carlosabrantesdev)
+
