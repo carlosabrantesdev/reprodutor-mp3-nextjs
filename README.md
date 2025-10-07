@@ -59,5 +59,5 @@ Acesse [http://localhost:3000](http://localhost:3000) no navegador para testar.
 ## Autor
 
 Desenvolvido por Carlos Abrantes
-GitHub: [github.com/carlosabrantesdev](https://github.com/carlosabrantesdev)
+
 
