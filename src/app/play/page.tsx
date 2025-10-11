@@ -2,16 +2,19 @@
 import React, { useEffect, useRef, useState } from "react";
 
 export default function MP3Player() {
-  const [playlist, setPlaylist] = useState<{ url: string; name: string }[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [coverUrl, setCoverUrl] = useState<string>("https://i.ibb.co/s9SDYs3M/image.png");
-  const [title, setTitle] = useState<string>("MP3 Player");
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0);
+  // Hooks de estado (UseState)
+  const [playlist, setPlaylist] = useState<{ url: string; name: string }[]>([]); // Playlist de músicas
+  const [currentIndex, setCurrentIndex] = useState<number>(0); // Índice da música atual
+  const [coverUrl, setCoverUrl] = useState<string>("https://i.ibb.co/s9SDYs3M/image.png"); // URL da capa padrão
+  const [title, setTitle] = useState<string>("Reprodutor MP3"); // Título da música
+  const [isPlaying, setIsPlaying] = useState<boolean>(false); // Estado de reprodução
+  const [progress, setProgress] = useState<number>(0); // Progresso da música na barra de porcentagem
+  const [volume, setVolume] = useState<number>(0.5); // Volume do áudio
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playBarRef = useRef<HTMLDivElement | null>(null);
 
+  // URLs das imagens dos botões de play/pause/next/prev
   const playImg = "https://i.ibb.co/bTTsKBc/play-1.png";
   const pauseImg = "https://i.ibb.co/Yz8j2WM/pause.png";
   const prevImg = "https://i.ibb.co/cc6ghPWH/play-2.png";
@@ -34,6 +37,7 @@ export default function MP3Player() {
     }
   }
 
+  // Carregar a música atual
   useEffect(() => {
     if (playlist.length === 0) return;
     const track = playlist[currentIndex];
@@ -48,7 +52,6 @@ export default function MP3Player() {
       setIsPlaying(true);
     }
   }, [currentIndex, playlist]);
-
 
   const handleTimeUpdate = () => {
     const audio = audioRef.current;
@@ -97,78 +100,130 @@ export default function MP3Player() {
     setCurrentIndex((curr) => (curr - 1 + playlist.length) % playlist.length);
   };
 
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) audioRef.current.volume = newVolume;
+  };
+
+  // Atualizar volume e ir para a próxima faixa quando a música terminar.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    audio.volume = volume;
     const handleEnded = () => nextTrack();
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
-  }, [playlist, currentIndex]);
+  }, [playlist, currentIndex, volume]);
 
-  return (
-    <section
-      className="h-[100vh] w-[100vw] flex justify-center items-center bg-black bg-cover bg-center transition-all duration-700"
-      style={{ backgroundImage: `url(${coverUrl})` }}
-    >
-      <div className="flex flex-col justify-between items-center bg-white h-[85vh] w-[55vh] p-[3vh] rounded-[2vh] shadow-md gap-[3vh] relative z-10">
-        <h1 className="text-[3.5vh] font-bold text-center text-black truncate w-[50vh] h-[15vh]">
-          {title}
-        </h1>
-        <img src={coverUrl} alt="cover" className="w-[50vh] h-auto rounded-[1vh] shadow-md" />
+return (
+  <section
+    className="h-[100vh] w-[100vw] flex justify-center items-center bg-black overflow-hidden relative"
+  >
+    <div
+      className="absolute inset-0 w-full h-full bg-cover bg-center blur-md"
+      style={{ backgroundImage: `url(${coverUrl})`, zIndex: 0 }}
+    ></div>
+
+    <div className="flex flex-col items-center bg-white h-[918px] w-[594px] rounded-[22px] shadow-md gap-[32px] relative z-10 p-8 scale-90">
+      <h1 className="text-[38px] font-bold text-center text-black truncate w-[540px] h-[162px]">
+        {title}
+      </h1>
+
+      <img src={coverUrl} alt="cover" className="w-[490px] h-auto rounded-[11px] shadow-md" />
+
+      <div
+        ref={playBarRef}
+        onClick={handleBarClick}
+        className="w-[540px] h-[11px] bg-gray-300 rounded-[11px] cursor-pointer relative"
+      >
         <div
-          ref={playBarRef}
-          onClick={handleBarClick}
-          className="w-[50vh] h-[1vh] bg-gray-300 rounded-[1vh] cursor-pointer relative"
-        >
-          <div
-            className="absolute top-0 left-0 h-full bg-black rounded-[1vh]"
-            style={{ width: `${progress}%` }}
-          />
-          <div
-            className="absolute top-1/2"
-            style={{
-              left: `calc(${progress}% )`,
-              transform: "translate(-50%, -50%)",
-              width: "2.7vh",
-              height: "2.7vh",
-              background: "white",
-              border: "0.5vh solid black",
-              borderRadius: "50%",
-              boxShadow: "0 0 2vh rgba(0,0,0,0.3)",
-              pointerEvents: "none",
-            }}
-          />
-        </div>
-        <div className="flex justify-between w-[20vh] items-center">
+          className="absolute top-0 left-0 h-full bg-black rounded-[11px]"
+          style={{ width: `${progress}%` }}
+        />
+        <div
+          className="absolute top-1/2"
+          style={{
+            left: `calc(${progress}% )`,
+            transform: "translate(-50%, -50%)",
+            width: "29px",
+            height: "29px",
+            background: "white",
+            border: "5px solid black",
+            borderRadius: "50%",
+            boxShadow: "0 0 22px rgba(0,0,0,0.3)",
+            pointerEvents: "none",
+          }}
+        />
+      </div>
+
+      <div className="flex flex-col items-center gap-[22px]">
+        <div className="flex justify-between w-[216px] items-center">
           <button onClick={prevTrack}>
-            <img src={prevImg} alt="previous" className="w-[4vh] h-[4vh] hover:scale-110 transition-transform" />
+            <img
+              src={prevImg}
+              alt="previous"
+              className="w-[43px] h-[43px] hover:scale-110 transition-transform"
+            />
           </button>
           <button onClick={togglePlay}>
             <img
               src={isPlaying ? pauseImg : playImg}
               alt="play"
-              className="w-[8vh] h-[8vh] hover:scale-110 transition-transform"
+              className="w-[86px] h-[86px] hover:scale-110 transition-transform"
             />
           </button>
           <button onClick={nextTrack}>
-            <img src={nextImg} alt="next" className="w-[4vh] h-[4vh] hover:scale-110 transition-transform" />
+            <img
+              src={nextImg}
+              alt="next"
+              className="w-[43px] h-[43px] hover:scale-110 transition-transform"
+            />
           </button>
         </div>
-        <audio
-          ref={audioRef}
-          className="hidden"
-          onTimeUpdate={handleTimeUpdate}
-        />
-        <div className="flex justify-center items-center w-[30vh] h-[15vh]">
-          <label
-            htmlFor="mp3Input"
-            className="flex justify-center items-center w-full h-full bg-gradient-to-br from-white to-gray-100 text-black text-[2.5vh] font-bold rounded-[1vh] shadow hover:scale-105 active:scale-95 transition-transform cursor-pointer"
-          >
-            Adicionar músicas
-          </label>
-          <input id="mp3Input" type="file" accept="audio/mpeg" multiple hidden onChange={handleFileChange} />
+
+        <div className="flex items-center gap-[11px] w-[324px]">
+          <span className="text-black text-[22px]">
+            <img src="https://i.ibb.co/0pGTxxcp/aaaa.png" alt="" className="w-[54px]" />
+          </span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-full h-[9px] bg-gray-300 rounded-lg appearance-none cursor-pointer accent-black"
+          />
+          <span className="text-black text-[22px]">
+            <img src="https://i.ibb.co/DHNVB44d/483365.png" alt="" className="w-[54px]" />
+          </span>
         </div>
       </div>
-    </section>
-  );
+
+      <audio
+        ref={audioRef}
+        className="hidden"
+        onTimeUpdate={handleTimeUpdate}
+      />
+
+      <div className="flex justify-center items-center w-[324px] h-[162px]">
+        <label
+          htmlFor="mp3Input"
+          className="flex justify-center items-center w-full h-full bg-gradient-to-br from-white to-gray-100 text-black text-[27px] font-bold rounded-[11px] shadow hover:scale-105 active:scale-92 transition-transform cursor-pointer"
+        >
+          Adicionar músicas
+        </label>
+        <input
+          id="mp3Input"
+          type="file"
+          accept="audio/mpeg"
+          multiple
+          hidden
+          onChange={handleFileChange}
+        />
+      </div>
+    </div>
+  </section>
+);
 }
