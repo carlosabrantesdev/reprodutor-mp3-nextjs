@@ -9,7 +9,7 @@ export default function MP3Player() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [volume, setVolume] = useState<number>(0.5);
-  const [isMuted, setIsMuted] = useState<boolean>(false); // novo estado
+  const [isMuted, setIsMuted] = useState<boolean>(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playBarRef = useRef<HTMLDivElement | null>(null);
@@ -19,7 +19,6 @@ export default function MP3Player() {
   const prevImg = "https://i.ibb.co/cc6ghPWH/play-2.png";
   const nextImg = "https://i.ibb.co/Mk4ZYpXq/play.png";
 
-  // Ícones de volume
   const volumeUpImg = "https://i.ibb.co/DHNVB44d/483365.png";
   const volumeDownImg = "https://i.ibb.co/0pGTxxcp/aaaa.png";
 
