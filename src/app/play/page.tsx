@@ -14,6 +14,7 @@ export default function MP3Player() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playBarRef = useRef<HTMLDivElement | null>(null);
 
+  // URLs das imagens dos botões de play/pause/next/prev
   const playImg = "https://i.ibb.co/bTTsKBc/play-1.png";
   const pauseImg = "https://i.ibb.co/Yz8j2WM/pause.png";
   const prevImg = "https://i.ibb.co/cc6ghPWH/play-2.png";
@@ -37,6 +38,7 @@ export default function MP3Player() {
     }
   }
 
+  // Carregar a música atual
   useEffect(() => {
     if (playlist.length === 0) return;
     const track = playlist[currentIndex];
@@ -168,6 +170,29 @@ export default function MP3Player() {
           <input id="mp3Input" type="file" accept="audio/mpeg" multiple hidden onChange={handleFileChange} />
         </div>
       </div>
-    </section>
-  );
+
+      <audio
+        ref={audioRef}
+        className="hidden"
+        onTimeUpdate={handleTimeUpdate}
+      />
+
+      <div className="flex justify-center items-center w-[324px] h-[162px]">
+        <label
+          htmlFor="mp3Input"
+          className="flex justify-center items-center w-full h-full bg-gradient-to-br from-white to-gray-100 text-black text-[27px] font-bold rounded-[11px] shadow hover:scale-105 active:scale-92 transition-transform cursor-pointer"
+        >
+          Adicionar músicas
+        </label>
+        <input
+          id="mp3Input"
+          type="file"
+          accept="audio/mpeg"
+          multiple
+          hidden
+          onChange={handleFileChange}
+        />
+      </div>
+  </section>
+);
 }
