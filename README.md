@@ -60,7 +60,3 @@ Acesse [http://localhost:3000](http://localhost:3000) no navegador para testar.
 
 Desenvolvido por Carlos Abrantes
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 6d1587c87aec5608184f56192b32d0670e8462af
